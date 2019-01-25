@@ -20,7 +20,7 @@ console.log(net.run([1,0]));
 //input:{red,green,blue}
 //output: {light,neural,dark}
 
-const colors = [
+/*const colors = [
     { green: 0.2, blue: 0.4 },
     { green: 0.4, blue: 0.6 },
     { red: 0.2, green: 0.8, blue: 0.8 },
@@ -81,4 +81,60 @@ for(let i=0;i<colors.length;i++)
 const invertedNet=new brain.NeuralNetwork({hiddenLayers:[3]});
 const invertedStats=invertedNet.train(invertedTrainingData);
 console.log(invertedStats);
+*/
+
+
+//********************************************************** */
+//Working with strings as one encoded vectors
+const restaurants = {
+    "Brilliant Yellow Corral": "Monday",
+    "Penny’s": "Tuesday",
+    "Right Coast Wings": "Wednesday",
+    "The Delusion Last Railway Car": "Thursday",
+    "Fun Day Inn": "Friday",
+    "JHOP": "Saturday",
+    "Owls": "Sunday"
+};
+
+// input: { Monday, Tuesday, Wednesday, etc. }
+// output: { Restaurant1, Restaurant2 }
+
+const trainingData = [];
+for(let restaurantName in restaurants){
+    const dayOfWeek=restaurants[restaurantName];
+    trainingData.push({
+        input:{[dayOfWeek]:1},
+        output:{[restaurantName]:1}
+    });
+}
+
+const net=new brain.NeuralNetwork({hiddenLayers:[3]});
+const stats=net.train(trainingData);
+console.log(stats)
+console.log(net.run({'Monday':1}));
+
+function restaurantForDay(dayOfWeek){
+    const result=net.run({[dayOfWeek]:1});
+    let highestValue=0;
+    let highestRestaurant='';
+    for(let restaurantName in result)
+    {
+        if(result[restaurantName]>highestValue)
+        {
+            highestValue=result[restaurantName];
+            highestRestaurant=restaurantName;
+        }
+    }
+    return highestRestaurant;
+}
+console.log(restaurantForDay('Monday'));
+console.log(restaurantForDay('Tuesday'));
+console.log(restaurantForDay('Wednesday'));
+console.log(restaurantForDay('Thrusday'));
+console.log(restaurantForDay('Friday'));
+console.log(restaurantForDay('Saturday'));
+console.log(restaurantForDay('Sunday'));
+
+
+
 
