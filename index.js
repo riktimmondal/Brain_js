@@ -142,7 +142,7 @@ console.log(restaurantForDay('Sunday'));
 // Count to 5
 // 1-5, 5-1
 
-const trainingData = [
+/*const trainingData = [
     [1,2,3,4,5],
     [5,4,3,2,1]
 ];
@@ -153,5 +153,56 @@ net.train(trainingData,{log:(status)=>console.log(status)});
 
 console.log(net.run([1,2,3]));
 console.log(net.run([5,4,3]));
+*/
 
 
+
+//****************************************************** */
+//Applying Normalization and Stock Predictor
+function scaleDown(step){//Normalize
+    return {
+        open:step.open /138,
+        high:step.high/138,
+        low:step.low/138,
+        close:step.close/138
+    };
+}
+console.log(scaleDown(rawData[0]));
+
+function scaleUp(step){//Denormalize
+    return {
+        open:step.open *138,
+        high:step.high*138,
+        low:step.low*138,
+        close:step.close*138
+    };
+}
+
+console.log(scaleUp(scaleDown(rawData[0])));
+
+const scaledData = rawData.map(scaleDown);
+const trainingData=[
+    scaledData.slice(0,5),
+    scaledData.slice(5,10),
+    scaledData.slice(10,15),
+    scaledData.slice(15,20),
+];
+
+console.log(trainingData)
+const net=new brain.recurrent.LSTMTimeStep({
+    inputSize:4,
+    hiddenLayers:[8,8],
+    outputSize:4
+});
+
+net.train(trainingData,{
+   learningRate: 0.005,
+   errorThresh: 0.02,
+  // log:(stats) => console.log(stats) 
+});
+
+//console.log(scaleUp(net.run(trainingData[0])));
+console.log(net.forecast([
+    trainingData[0][0],
+    trainingData[0][1],
+], 3).map(scaleUp));
