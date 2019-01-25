@@ -86,7 +86,7 @@ console.log(invertedStats);
 
 //********************************************************** */
 //Working with strings as one encoded vectors
-const restaurants = {
+/*const restaurants = {
     "Brilliant Yellow Corral": "Monday",
     "Penny’s": "Tuesday",
     "Right Coast Wings": "Wednesday",
@@ -134,7 +134,24 @@ console.log(restaurantForDay('Thrusday'));
 console.log(restaurantForDay('Friday'));
 console.log(restaurantForDay('Saturday'));
 console.log(restaurantForDay('Sunday'));
+*/
 
 
+//************************************************************************ */
+//Making a counter
+// Count to 5
+// 1-5, 5-1
+
+const trainingData = [
+    [1,2,3,4,5],
+    [5,4,3,2,1]
+];
+
+const net = new brain.recurrent.LSTMTimeStep();
+
+net.train(trainingData,{log:(status)=>console.log(status)});
+
+console.log(net.run([1,2,3]));
+console.log(net.run([5,4,3]));
 
 
